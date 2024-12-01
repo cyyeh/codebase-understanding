@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from src.code_parser import CodeParser
+from src.components.code_parser import CodeParser
 
 
 @pytest.fixture

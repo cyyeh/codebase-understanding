@@ -1,8 +1,8 @@
 from pathlib import Path
 
-from code_parser import CodeParser
+from src.components.code_parser import CodeParser
 
 
 code_parser = CodeParser(Path('example'))
 code_files = code_parser.parse()
-print(len(code_files))
+print(f'Number of code files: {len(code_files)}')
