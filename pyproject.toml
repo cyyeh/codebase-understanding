@@ -10,6 +10,7 @@ python = "^3.12"
 tree-sitter = "^0.23.2"
 tree-sitter-python = "^0.23.4"
 qdrant-client = "^1.12.1"
+sf-hamilton = {extras = ["sdk", "ui"], version = "^1.83.3"}
 
 
 [build-system]
