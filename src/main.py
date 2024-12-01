@@ -32,7 +32,7 @@ class CodeFileParser:
         self.code_files: list[CodeFile] = []
 
     def _parse_and_analyze_code(self, file: Path) -> CodeFile:
-        def process_import(node: Node, code_file: CodeFile):
+        def _process_import(node: Node, code_file: CodeFile):
             if node.type == "import_statement":
                 for child in node.children:
                     if child.type == "dotted_name":
@@ -49,7 +49,7 @@ class CodeFileParser:
                             package_name = child.text.decode("utf8")
                             code_file.imports.append(f"{module_name}.{package_name}")
 
-        def process_class(node: Node, code_file: CodeFile):
+        def _process_class(node: Node, code_file: CodeFile):
             for child in node.children:
                 if child.type == "identifier":
                     code_file.global_classes.append(
@@ -59,7 +59,7 @@ class CodeFileParser:
                         )
                     )
 
-        def process_function(node: Node, code_file: CodeFile):
+        def _process_function(node: Node, code_file: CodeFile):
             for child in node.children:
                 if child.type == "identifier":
                     code_file.global_functions.append(
@@ -69,16 +69,16 @@ class CodeFileParser:
                         )
                     )
 
-        def traverse(nodes: list[Node], code_file: CodeFile):
+        def _traverse(nodes: list[Node], code_file: CodeFile):
             for node in nodes:
                 if node.type in ["import_statement", "import_from_statement"]:
-                    process_import(node, code_file)
+                    _process_import(node, code_file)
                 elif node.type == "class_definition":
-                    process_class(node, code_file)
+                    _process_class(node, code_file)
                 elif node.type == "function_definition":
-                    process_function(node, code_file)
+                    _process_function(node, code_file)
                 elif node.type == "decorated_definition":
-                    traverse(node.children, code_file)
+                    _traverse(node.children, code_file)
 
         with open(file, 'r') as f:
             code = f.read()
@@ -91,7 +91,7 @@ class CodeFileParser:
             global_functions=[],
         )
         tree = CodeFileParser._parser.parse(bytes(code, 'utf-8'))
-        traverse(tree.root_node.children, code_file)
+        _traverse(tree.root_node.children, code_file)
 
         return code_file
 
