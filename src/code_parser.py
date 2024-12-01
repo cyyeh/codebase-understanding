@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Literal
 import tree_sitter_python as tspython
 from tree_sitter import Language, Parser, Node
 
