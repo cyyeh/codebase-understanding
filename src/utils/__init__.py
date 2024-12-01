@@ -1,4 +1,4 @@
-from .lm import (
+from .llm import (
     ChatMessage,
     StreamingChunk,
     build_chunk,
