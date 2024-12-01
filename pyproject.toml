@@ -14,6 +14,9 @@ qdrant-client = "^1.12.1"
 sf-hamilton = {extras = ["sdk", "ui"], version = "^1.83.3"}
 
 
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
