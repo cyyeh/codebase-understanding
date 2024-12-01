@@ -32,17 +32,13 @@ class CodeFileParser:
         self.code_files: list[CodeFile] = []
 
     def _parse_and_analyze_code(self, file: Path) -> CodeFile:
-        imports: list[str] = []
-        global_classes: list[str] = []
-        global_functions: list[str] = []
-
-        def process_import(node: Node):
+        def process_import(node: Node, code_file: CodeFile):
             if node.type == "import_statement":
                 for child in node.children:
                     if child.type == "dotted_name":
-                        imports.append(child.text.decode("utf8"))
+                        code_file.imports.append(child.text.decode("utf8"))
                     elif child.type == "aliased_import":
-                        imports.append(child.children[0].text.decode("utf8"))
+                        code_file.imports.append(child.children[0].text.decode("utf8"))
             elif node.type == "import_from_statement":
                 module_name = ""
                 for child in node.children:
@@ -51,38 +47,38 @@ class CodeFileParser:
                             module_name = child.text.decode("utf8")
                         else:
                             package_name = child.text.decode("utf8")
-                            imports.append(f"{module_name}.{package_name}")
+                            code_file.imports.append(f"{module_name}.{package_name}")
 
-        def process_class(node: Node):
+        def process_class(node: Node, code_file: CodeFile):
             for child in node.children:
                 if child.type == "identifier":
-                    global_classes.append(
+                    code_file.global_classes.append(
                         CodeFile.Class(
                             name=child.text.decode("utf8"),
                             content=node.text.decode("utf8")
                         )
                     )
 
-        def process_function(node: Node):
+        def process_function(node: Node, code_file: CodeFile):
             for child in node.children:
                 if child.type == "identifier":
-                    global_functions.append(
+                    code_file.global_functions.append(
                         CodeFile.Function(
                             name=child.text.decode("utf8"),
                             content=node.text.decode("utf8")
                         )
                     )
 
-        def traverse(nodes: list[Node]):
+        def traverse(nodes: list[Node], code_file: CodeFile):
             for node in nodes:
                 if node.type in ["import_statement", "import_from_statement"]:
-                    process_import(node)
+                    process_import(node, code_file)
                 elif node.type == "class_definition":
-                    process_class(node)
+                    process_class(node, code_file)
                 elif node.type == "function_definition":
-                    process_function(node)
+                    process_function(node, code_file)
                 elif node.type == "decorated_definition":
-                    traverse(node.children)
+                    traverse(node.children, code_file)
 
         with open(file, 'r') as f:
             code = f.read()
@@ -95,11 +91,7 @@ class CodeFileParser:
             global_functions=[],
         )
         tree = CodeFileParser._parser.parse(bytes(code, 'utf-8'))
-        traverse(tree.root_node.children)
-
-        code_file.imports = imports
-        code_file.global_classes = global_classes
-        code_file.global_functions = global_functions
+        traverse(tree.root_node.children, code_file)
 
         return code_file
 
