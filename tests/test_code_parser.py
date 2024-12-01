@@ -22,4 +22,4 @@ def test_parse(code_path: Path):
 
     for global_function in code_files[0].global_functions:
         assert global_function.content.startswith('def ')
-    assert [global_function.name for global_function in code_files[0].global_functions] == ['a']
+    assert [global_function.name for global_function in code_files[0].global_functions] == ['fun_a']

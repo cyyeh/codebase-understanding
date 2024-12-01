@@ -17,5 +17,5 @@ class A:
 class B:
     pass
 
-def a():
+def fun_a():
     pass
