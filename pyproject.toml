@@ -14,6 +14,8 @@ qdrant-client = "^1.12.1"
 sf-hamilton = {extras = ["sdk", "ui"], version = "^1.83.3"}
 litellm = "^1.53.1"
 python-dotenv = "^1.0.1"
+haystack-ai = "^2.7.0"
+qdrant-haystack = "^7.0.0"
 
 
 [tool.poetry.group.dev.dependencies]

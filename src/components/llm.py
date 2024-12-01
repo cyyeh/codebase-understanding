@@ -5,7 +5,7 @@ from litellm import acompletion
 from litellm.types.utils import ModelResponse
 
 from src.core.provider import LLMProvider
-from src.utils import (
+from src.utils.llm import (
     ChatMessage,
     StreamingChunk,
     convert_message_to_openai_format,
