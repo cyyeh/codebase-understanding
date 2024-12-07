@@ -83,7 +83,7 @@ def postprocess_function_summaries(generate_function_summaries: list[dict], pars
 
 @observe(capture_input=False, capture_output=False)
 async def embed_functions(postprocess_function_summaries: list[Document], embedder: Any) -> Dict[str, Any]:
-    return await embedder.run(documents=postprocess_function_summaries)
+    return await embedder(documents=postprocess_function_summaries)
 
 
 @observe(capture_input=False)
@@ -134,6 +134,7 @@ class CodeFunctionIndexing(BasicPipeline):
             AsyncDriver({}, sys.modules[__name__], result_builder=base.DictResult())
         )
 
+    @observe(name="Code Function Indexing")
     async def run(self, parsed_code: list[Code]):
         return await self._pipe.execute(
             ["write_functions"],

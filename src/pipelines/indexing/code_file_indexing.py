@@ -77,7 +77,7 @@ def postprocess_file_summaries(generate_file_summaries: list[dict], parsed_code:
 
 @observe(capture_input=False, capture_output=False)
 async def embed_files(postprocess_file_summaries: list[Document], embedder: Any) -> Dict[str, Any]:
-    return await embedder.run(documents=postprocess_file_summaries)
+    return await embedder(documents=postprocess_file_summaries)
 
 
 @observe(capture_input=False)
@@ -128,6 +128,7 @@ class CodeFileIndexing(BasicPipeline):
             AsyncDriver({}, sys.modules[__name__], result_builder=base.DictResult())
         )
 
+    @observe(name="Code File Indexing")
     async def run(self, parsed_code: list[Code]):
         return await self._pipe.execute(
             ["write_files"],

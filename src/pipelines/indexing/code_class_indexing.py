@@ -82,7 +82,7 @@ def postprocess_class_summaries(generate_class_summaries: list[str], parsed_code
 
 @observe(capture_input=False, capture_output=False)
 async def embed_classes(postprocess_class_summaries: list[Document], embedder: Any) -> Dict[str, Any]:
-    return await embedder.run(documents=postprocess_class_summaries)
+    return await embedder(documents=postprocess_class_summaries)
 
 
 @observe(capture_input=False)
@@ -133,6 +133,7 @@ class CodeClassIndexing(BasicPipeline):
             AsyncDriver({}, sys.modules[__name__], result_builder=base.DictResult())
         )
 
+    @observe(name="Code Class Indexing")
     async def run(self, parsed_code: list[Code]):
         return await self._pipe.execute(
             ["write_classes"],

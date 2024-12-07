@@ -47,6 +47,9 @@ class AsyncTextEmbedder(OpenAITextEmbedder):
             base_url=api_base_url,
         )
 
+    async def __call__(self, *args, **kwargs):
+        return await self.run(*args, **kwargs)
+
     @component.output_types(embedding=List[float], meta=Dict[str, Any])
     async def run(self, text: str):
         if not isinstance(text, str):
@@ -143,6 +146,9 @@ class AsyncDocumentEmbedder(OpenAIDocumentEmbedder):
                 meta["usage"]["total_tokens"] += response.usage.total_tokens
 
         return all_embeddings, meta
+
+    async def __call__(self, *args, **kwargs):
+        return await self.run(*args, **kwargs)
 
     @component.output_types(documents=List[Document], meta=Dict[str, Any])
     async def run(self, documents: List[Document]):
