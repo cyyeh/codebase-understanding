@@ -7,7 +7,7 @@ from haystack.utils import Secret
 from qdrant_client.http import models as rest
 
 from src.core.provider import DocumentStoreProvider
-from src.utils.qdrant import AsyncQdrantDocumentStore, AsyncQdrantEmbeddingRetriever
+from src.providers.document_store import AsyncQdrantDocumentStore, AsyncQdrantEmbeddingRetriever
 
 load_dotenv()
 

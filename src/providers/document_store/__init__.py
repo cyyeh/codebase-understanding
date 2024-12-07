@@ -24,6 +24,7 @@ from qdrant_client.http import models as rest
 from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
+
 def convert_haystack_documents_to_qdrant_points(
     documents: List[Document],
     *,

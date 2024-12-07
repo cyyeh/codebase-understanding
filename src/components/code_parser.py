@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Optional
+
 import tree_sitter_python as tspython
 from tree_sitter import Language, Parser, Node
 
@@ -10,25 +12,24 @@ class Code:
     class Class:
         name: str
         content: str
+        generated_summary: Optional[str] = None
 
     @dataclass
     class Function:
         name: str
         content: str
+        generated_summary: Optional[str] = None
 
     path: Path
     content: str
     imports: list[str]
     global_classes: list[Class]
     global_functions: list[Function]
+    generated_summary: Optional[str] = None
 
 
 class CodeParser:
     _parser = Parser(Language(tspython.language()))
-
-    def __init__(self, path: Path):
-        self.path = path
-        self.code_files: list[Code] = []
 
     def _parse_and_analyze_code(self, file: Path) -> Code:
         def _process_import(node: Node, code_file: Code):
@@ -94,9 +95,8 @@ class CodeParser:
 
         return code_file
 
-    def parse(self) -> list[Code]:
-        self.code_files = [
+    def parse(self, path: Path) -> list[Code]:
+        return [
             self._parse_and_analyze_code(file)
-            for file in sorted(self.path.glob('**/*.py'))
+            for file in sorted(path.glob('**/*.py'))
         ]
-        return self.code_files

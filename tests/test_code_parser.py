@@ -11,8 +11,8 @@ def code_path():
 
 
 def test_parse(code_path: Path):
-    code_parser = CodeParser(code_path)
-    code_files = code_parser.parse()
+    code_parser = CodeParser()
+    code_files = code_parser.parse(code_path)
     assert len(code_files) == 1
     assert code_files[0].imports == ['a.b', 'a.b.c', 'd.d_1', 'd.d_2', 'd.d_3', 'e.e_1', 'e.e_2', 'e.e_3', 'f']
 
